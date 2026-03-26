@@ -12,18 +12,12 @@ class Settings:
 
 
 def load_settings(env_path: str = ".env") -> Settings:
-    """
-    Load settings from `.env` (not hardcoded).
-
-    `python-dotenv` will read environment variables from the .env file.
-    """
-
     load_dotenv(env_path)
 
     api_key = os.getenv("OPENWEATHER_API_KEY", "").strip()
     if not api_key:
         raise ValueError(
-            "Missing OPENWEATHER_API_KEY. Create a `.env` file using `.env.example`."
+            "Missing OPENWEATHER_API_KEY. Add it to the `.env` file."
         )
 
     return Settings(

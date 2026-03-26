@@ -21,13 +21,6 @@ def _build_delayed_message(customer: str, city: str, weather_main: str) -> str:
     )
 
 
-def _build_on_track_message(customer: str, city: str) -> str:
-    return (
-        f"Hi {customer}, your order to {city} is on track. "
-        "We appreciate your patience!"
-    )
-
-
 def _build_error_message(customer: str, city: str) -> str:
     return (
         f"Hi {customer}, we are experiencing an issue checking weather for {city} right now. "
@@ -61,20 +54,20 @@ async def _process_one_order(
             order["status"] = "Delayed"
             order["message"] = _build_delayed_message(customer, city, weather_main)
         else:
-            # For other weather types, we mark the order as on time.
-            order["status"] = "On Time"
-            order["message"] = _build_on_track_message(customer, city)
+            order["message"] = (
+                f"Hi {customer}, your order to {city} is on track. "
+                "We appreciate your patience!"
+            )
 
         logger.info(f"order_id={order_id} city={city} weather={weather_main}")
         return order
 
     except OpenWeatherError as exc:
-        # Invalid city (like InvalidCity123) should not crash the whole script.
-        logger.error(f"order_id={order_id} city={city} OpenWeatherError: {exc}")
+        logger.error(f"order_id={order_id} city={city} {exc}")
         order["status"] = "Error"
         order["message"] = _build_error_message(customer, city)
         return order
-    except Exception as exc:  # Catch-all to prevent one failure from stopping all.
+    except Exception as exc:
         logger.error(f"order_id={order_id} city={city} unexpected error: {exc}")
         order["status"] = "Error"
         order["message"] = _build_error_message(customer, city)
@@ -82,10 +75,6 @@ async def _process_one_order(
 
 
 async def process_orders(orders_path: str = "orders.json", env_path: str = ".env") -> None:
-    """
-    Load orders, fetch all city weather in parallel, then write back updated orders.json.
-    """
-
     logger = setup_logger()
     settings = load_settings(env_path=env_path)
 
@@ -94,12 +83,10 @@ async def process_orders(orders_path: str = "orders.json", env_path: str = ".env
 
     timeout = aiohttp.ClientTimeout(total=25)
     headers = {
-        # Beginner-friendly: a basic user-agent helps with some environments.
         "User-Agent": "weather-orders/1.0",
     }
 
     async with aiohttp.ClientSession(timeout=timeout, headers=headers) as session:
-        # Build tasks for ALL orders so they run concurrently.
         tasks = [
             _process_one_order(
                 order.copy(), session=session, settings=settings, logger=logger
