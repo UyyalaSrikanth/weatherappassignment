@@ -1,0 +1,30 @@
+[
+  {
+    "order_id": "1001",
+    "customer": "Alice Smith",
+    "city": "New York",
+    "status": "On Time",
+    "message": "Hi Alice Smith, your order to New York is on track. We appreciate your patience!"
+  },
+  {
+    "order_id": "1002",
+    "customer": "Bob Jones",
+    "city": "Mumbai",
+    "status": "On Time",
+    "message": "Hi Bob Jones, your order to Mumbai is on track. We appreciate your patience!"
+  },
+  {
+    "order_id": "1003",
+    "customer": "Charlie Green",
+    "city": "London",
+    "status": "On Time",
+    "message": "Hi Charlie Green, your order to London is on track. We appreciate your patience!"
+  },
+  {
+    "order_id": "1004",
+    "customer": "InvalidCity123",
+    "city": "InvalidCity123",
+    "status": "Error",
+    "message": "Hi InvalidCity123, we are experiencing an issue checking weather for InvalidCity123 right now. Your order status will be updated as soon as we can. We appreciate your patience!"
+  }
+]
