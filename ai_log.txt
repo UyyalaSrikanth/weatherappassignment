@@ -1,0 +1,16 @@
+AI Log
+
+Prompt 1:
+How to implement parallel API calls in Python using asyncio and aiohttp?
+
+Prompt 2:
+How to use asyncio.gather to fetch multiple API responses concurrently?
+
+Prompt 3:
+How to handle API errors like invalid city in aiohttp without crashing the program?
+
+Prompt 4:
+Generate a personalized apology message based on weather conditions like Rain, Snow, or Extreme.
+
+Prompt 5:
+How to securely store and load API keys using a .env file in Python?
